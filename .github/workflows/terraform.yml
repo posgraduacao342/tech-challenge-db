@@ -10,8 +10,8 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     name: "Terraform"
+    runs-on: ubuntu-latest
     permissions:
       pull-requests: write
     steps:
