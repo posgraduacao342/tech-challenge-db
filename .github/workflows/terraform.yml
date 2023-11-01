@@ -11,7 +11,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    name: "Terraform"
+    permissions:
+      pull-requests: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
