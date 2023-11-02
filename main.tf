@@ -16,10 +16,6 @@ variable "vpc_id" {
   description = "ID da VPC"
 }
 
-variable "vpc_ips" {
-  description = "VPC ips"
-}
-
 variable "role_arn" {
   description = "Role"
 }
@@ -27,6 +23,11 @@ variable "role_arn" {
 variable "db_instance_name" {
   description = "Nome da instância do banco de dados"
   default     = "tech-challenge-db"
+}
+
+variable "vpc_ips" {
+  type    = list(string)
+  default = ["0.0.0.0/0"]
 }
 
 resource "aws_security_group" "database_access" {
@@ -38,7 +39,7 @@ resource "aws_security_group" "database_access" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.vpc_ips
   }
 
   tags = {
