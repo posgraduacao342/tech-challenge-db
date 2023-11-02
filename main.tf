@@ -16,6 +16,10 @@ variable "vpc_id" {
   description = "ID da VPC"
 }
 
+variable "vpc_ips" {
+  description = "ID da VPC"
+}
+
 resource "aws_security_group" "database_access" {
   name        = "allow-database-access"
   description = "Security group to allow database access"
@@ -25,7 +29,7 @@ resource "aws_security_group" "database_access" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = [var.vpc_ips]
   }
 
   tags = {
@@ -42,6 +46,7 @@ resource "aws_db_instance" "postgresql_instance" {
   db_name           = "postgres"
   username          = var.db_username
   password          = var.db_password
+  publicly_accessible = true
 
   vpc_security_group_ids = [aws_security_group.database_access.id]
 }

@@ -41,6 +41,7 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
           TF_VAR_vpc_id: ${{ env.VPC_ID }}
+          TF_VAR_vpc_ips: ${{ env.VPC_IPS }}
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -52,3 +53,4 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_DEFAULT_REGION: us-east-1
           TF_VAR_vpc_id: ${{ env.VPC_ID }}
+          TF_VAR_vpc_ips: ${{ env.VPC_IPS }}
