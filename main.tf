@@ -25,11 +25,6 @@ variable "db_instance_name" {
   default     = "tech-challenge-db"
 }
 
-variable "vpc_ips" {
-  type    = list(string)
-  default = ["0.0.0.0/0"]
-}
-
 resource "aws_security_group" "database_access" {
   name        = "allow-database-access"
   description = "Security group to allow database access"
@@ -39,7 +34,7 @@ resource "aws_security_group" "database_access" {
     from_port   = 5432
     to_port     = 5432
     protocol    = "tcp"
-    cidr_blocks = var.vpc_ips
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
