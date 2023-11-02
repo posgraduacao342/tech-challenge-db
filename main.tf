@@ -20,6 +20,11 @@ variable "vpc_ips" {
   description = "ID da VPC"
 }
 
+variable "db_instance_name" {
+  description = "Nome da instância do banco de dados"
+  default     = "tech-challenge-db"
+}
+
 resource "aws_security_group" "database_access" {
   name        = "allow-database-access"
   description = "Security group to allow database access"
@@ -47,6 +52,7 @@ resource "aws_db_instance" "postgresql_instance" {
   username          = var.db_username
   password          = var.db_password
   publicly_accessible = true
+  identifier        = var.db_instance_name
 
   vpc_security_group_ids = [aws_security_group.database_access.id]
 }
