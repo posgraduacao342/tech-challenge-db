@@ -76,13 +76,6 @@ resource "aws_security_group" "db_proxy_sg" {
   vpc_id      = var.vpc_id
 }
 
-resource "aws_subnet" "db_proxy_subnet" {
-  count             = 2
-  vpc_id            = var.vpc_id
-  cidr_block        = "10.0.0.0/16"
-  availability_zone = "us-east-1a"
-}
-
 resource "aws_db_proxy" "db_proxy" {
   name                   = "tech-challenge-db-proxy"
   debug_logging          = false
@@ -91,7 +84,7 @@ resource "aws_db_proxy" "db_proxy" {
   require_tls            = true
   role_arn               = var.role_arn
   vpc_security_group_ids = [aws_security_group.db_proxy_sg.id]
-  vpc_subnet_ids         = aws_subnet.db_proxy_subnet[*].id
+  vpc_subnet_ids         = ["subnet-0709590cb6000f6d7"]
 
   auth {
     auth_scheme = "SECRETS"
