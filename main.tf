@@ -56,3 +56,16 @@ resource "aws_db_instance" "postgresql_instance" {
 
   vpc_security_group_ids = [aws_security_group.database_access.id]
 }
+
+resource "aws_secretsmanager_secret" "db_credentials" {
+  name = "tech-challenge-db-secret-manager"
+  description = "Secret for RDS database credentials"
+}
+
+resource "aws_secretsmanager_secret_version" "db_credentials_version" {
+  secret_id     = aws_secretsmanager_secret.db_credentials.id
+  secret_string = jsonencode({
+    "username": var.db_username,
+    "password": var.db_password
+  })
+}
