@@ -17,7 +17,11 @@ variable "vpc_id" {
 }
 
 variable "vpc_ips" {
-  description = "ID da VPC"
+  description = "VPC ips"
+}
+
+variable "role_arn" {
+  description = "Role"
 }
 
 variable "db_instance_name" {
@@ -68,4 +72,34 @@ resource "aws_secretsmanager_secret_version" "db_credentials_version" {
     "username": var.db_username,
     "password": var.db_password
   })
+}
+
+resource "aws_security_group" "db_proxy_sg" {
+  name        = "tech-challenge-db-proxy-sg"
+  description = "Security group for the RDS DB proxy"
+  vpc_id      = var.vpc_id
+}
+
+resource "aws_subnet" "db_proxy_subnet" {
+  count             = 2
+  vpc_id            = var.vpc_id
+  cidr_block        = "10.0.0.0/16"
+  availability_zone = "us-east-1a"
+}
+
+resource "aws_db_proxy" "db_proxy" {
+  name                   = "tech-challenge-db-proxy"
+  debug_logging          = false
+  engine_family          = "POSTGRESQL"
+  idle_client_timeout    = 1800
+  require_tls            = true
+  role_arn               = var.role_arn
+  vpc_security_group_ids = [aws_security_group.db_proxy_sg.id]
+  vpc_subnet_ids         = aws_subnet.db_proxy_subnet[*].id
+
+  auth {
+    auth_scheme = "SECRETS"
+    iam_auth    = "DISABLED"
+    secret_arn  = aws_secretsmanager_secret.db_credentials.arn
+  }
 }
