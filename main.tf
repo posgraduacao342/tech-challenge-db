@@ -12,6 +12,27 @@ variable "db_password" {
   sensitive = true
 }
 
+variable "vpc_id" {
+  description = "ID da VPC"
+}
+
+resource "aws_security_group" "database_access" {
+  name        = "allow-database-access"
+  description = "Security group to allow database access"
+  vpc_id      = var.vpc_id
+
+  ingress {
+    from_port   = 5432
+    to_port     = 5432
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "database_access"
+  }
+}
+
 resource "aws_db_instance" "postgresql_instance" {
   allocated_storage = 20
   storage_type      = "gp2"
@@ -21,4 +42,6 @@ resource "aws_db_instance" "postgresql_instance" {
   db_name           = "postgres"
   username          = var.db_username
   password          = var.db_password
+
+  vpc_security_group_ids = [aws_security_group.database_access.id]
 }
