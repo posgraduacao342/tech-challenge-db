@@ -15,18 +15,23 @@ resource "aws_security_group" "database_access" {
   }
 }
 
-resource "aws_db_instance" "postgresql_instance" {
-  allocated_storage   = 20
-  storage_type        = "gp2"
-  engine              = "postgres"
-  engine_version      = "15.3"
-  instance_class      = "db.t3.micro"
-  db_name             = "postgres"
-  username            = var.db_username
-  password            = var.db_password
-  publicly_accessible = true
-  identifier          = var.db_instance_name
+resource "aws_db_subnet_group" "this" {
+  name       = "tech-challenge-rds-subnet-group"
+  subnet_ids = data.aws_subnets.this.ids
+}
 
+resource "aws_db_instance" "postgresql_instance" {
+  allocated_storage      = 20
+  storage_type           = "gp2"
+  engine                 = "postgres"
+  engine_version         = "15.3"
+  instance_class         = "db.t3.micro"
+  db_name                = "postgres"
+  username               = var.db_username
+  password               = var.db_password
+  publicly_accessible    = true
+  identifier             = var.db_instance_name
+  db_subnet_group_name   = aws_db_subnet_group.this.name
   vpc_security_group_ids = [aws_security_group.database_access.id]
 }
 
