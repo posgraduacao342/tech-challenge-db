@@ -57,7 +57,7 @@ resource "aws_db_proxy" "db_proxy" {
   require_tls            = true
   role_arn               = var.role_arn
   vpc_security_group_ids = [aws_security_group.db_proxy_sg.id]
-  vpc_subnet_ids         = [data.aws_subnets.this.ids]
+  vpc_subnet_ids         = data.aws_subnets.this.ids
 
   auth {
     auth_scheme = "SECRETS"
