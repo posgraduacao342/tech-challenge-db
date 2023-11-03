@@ -3,7 +3,7 @@ resource "aws_s3_bucket" "remote_state" {
 
   tags = {
     description = "Terraform RDS data base infrastructure remote state files storing"
-    name = "terraform-rds-state"
+    name        = "terraform-rds-state"
   }
 }
 
