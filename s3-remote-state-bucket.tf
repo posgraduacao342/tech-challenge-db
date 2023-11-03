@@ -1,9 +1,9 @@
 resource "aws_s3_bucket" "remote_state" {
-  bucket = "terraform-db-state"
+  bucket = "terraform-rds-state"
 
   tags = {
-    description = "Terraform data-base infrastructure remote state files storing"
-    name = "terraform-db-state"
+    description = "Terraform RDS data base infrastructure remote state files storing"
+    name = "terraform-rds-state"
   }
 }
 
