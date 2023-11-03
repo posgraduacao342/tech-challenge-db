@@ -31,7 +31,7 @@ resource "aws_db_instance" "postgresql_instance" {
 }
 
 resource "aws_secretsmanager_secret" "db_credentials" {
-  name        = "tech-challenge-db-secret-manager"
+  name        = "tech-challenge-rds-secret-manager"
   description = "Secret for RDS database credentials"
 }
 
@@ -57,7 +57,7 @@ resource "aws_db_proxy" "db_proxy" {
   require_tls            = true
   role_arn               = var.role_arn
   vpc_security_group_ids = [aws_security_group.db_proxy_sg.id]
-  vpc_subnet_ids         = ["subnet-0709590cb6000f6d7"]
+  vpc_subnet_ids         = [data.aws_subnets.this.ids]
 
   auth {
     auth_scheme = "SECRETS"
