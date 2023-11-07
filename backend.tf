@@ -1,7 +1,7 @@
 terraform {
   backend "s3" {
-    bucket = "pos-graduacao-fiap-terraform-state"
+    bucket = "pos-graduacao-terraform-state-us-east-2"
     key    = "rds/terraform.tfstate"
-    region = "us-east-1"
+    region = "us-east-2"
   }
 }
